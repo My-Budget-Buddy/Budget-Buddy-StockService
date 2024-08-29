@@ -1,0 +1,29 @@
+spring:
+    datasource:
+        url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/stockservice}
+        username: ${DATABASE_USERNAME:postgres}
+        password: ${DATABASE_PASSWORD:postgres1}
+        driverClassName: org.postgresql.Driver
+    output:
+        ansi:
+            enabled: ALWAYS
+    application:
+        name: stock-service
+
+    jpa:
+        hibernate:
+            ddl-auto: update
+logging:
+    level:
+        com:
+            skillstorm: debug
+
+server:
+    port: 8086
+
+# eureka:
+#     client:
+#         service-url:
+#             defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+#     instance:
+#         leaseRenewalIntervalInSeconds: 30
