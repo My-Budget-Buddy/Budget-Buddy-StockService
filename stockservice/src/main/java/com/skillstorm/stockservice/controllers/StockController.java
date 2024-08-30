@@ -64,7 +64,11 @@ public class StockController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteStock(@PathVariable int id) {
         if (stockService.getStockById(id) != null) {
-            stockService.deleteStock(id);
+            try {
+                stockService.deleteStock(id);
+            } catch (Exception e) {
+                e.getMessage();
+            }
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
