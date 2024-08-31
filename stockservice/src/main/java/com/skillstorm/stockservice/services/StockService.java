@@ -40,9 +40,10 @@ public class StockService {
         return stockRepository.save(stock);
     }
 
-    public void deleteStock(int id){
+    public void deleteStock(int id) throws Exception{
         if(!stockRepository.existsById(id)){
-
+            throw new Exception("Stock with id: " + id + " not found");
         }
+        stockRepository.deleteById(id);
     }
 }
