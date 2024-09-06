@@ -74,4 +74,14 @@ public class StockController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @PostMapping("/update/{symbol}")
+    public ResponseEntity<String> updateStockData(@PathVariable String symbol){
+        try{
+            stockService.updateStockData(symbol);
+            return new ResponseEntity<>("Stock data updated successfully", HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>("Error updating stock data: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

@@ -18,10 +18,10 @@ public class Stock {
     @Column(unique = true, nullable = false)
     private String symbol;
 
-    @Column(nullable = false)
+    @Column()
     private String companyName;
 
-    @Column(nullable = false)
+    @Column()
     private LocalDateTime createdAt = LocalDateTime.now();
 
     
