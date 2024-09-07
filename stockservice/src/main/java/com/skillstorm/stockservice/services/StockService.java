@@ -40,6 +40,16 @@ public class StockService {
         return stock.orElse(null);
     }
 
+    public Stock getStockBySymbol(String symbol){
+        Stock stock = stockRepository.findBySymbol(symbol);
+        if(stock != null){
+            return stock;
+        }
+        else{
+            return null;
+        }
+    }
+
     public Stock updateStock(int id, Stock updatedStock) {
         Optional<Stock> existingStock = stockRepository.findById(id);
         if (existingStock.isPresent()) {
