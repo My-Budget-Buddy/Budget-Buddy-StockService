@@ -29,10 +29,10 @@ public class InventoryService {
     @Autowired
     private StockPriceRespository stockPriceRepository;
 
-    // Adds Stock and StockPrice to Inventory using stock symbol
-    public Inventory addStockToInventory(int userId, String stockSymbol, Integer quantity) throws Exception {
-        // Find the stock by symbol
-        StockPrice stockPrice = stockPriceRepository.findByStockOnly_Symbol(stockSymbol);
+     // Adds Stock and StockPrice to Inventory using stock symbol
+     public Inventory addStockToInventory(int userId, String stockSymbol, Integer quantity) throws Exception {
+        // Find the stockPrice by symbol
+        StockPrice stockPrice = stockPriceRepository.findLatestByStockSymbol(stockSymbol);
 
         if (stockPrice != null) {
             // Create a new inventory item
@@ -75,12 +75,13 @@ public class InventoryService {
 
     // Deletes a stock from the inventory
     public void deleteStockFromInventory(int userId, String stockSymbol) throws Exception {
-        Stock stock = stockRepository.findBySymbol(stockSymbol);
-        if (stock == null) {
+        // Find stockPrice by symbol
+        StockPrice stockPrice = stockPriceRepository.findLatestByStockSymbol(stockSymbol);
+        if (stockPrice == null) {
             throw new Exception("Stock with symbol: " + stockSymbol + " not found.");
         }
 
-        Optional<Inventory> inventory = inventoryRepository.findByUserIdAndStock(userId, stock);
+        Optional<Inventory> inventory = inventoryRepository.findByUserIdAndStockPrice(userId, stockPrice);
         if (inventory.isEmpty()) {
             throw new Exception("Inventory item not found for user ID: " + userId + " and stock symbol: " + stockSymbol);
         }
@@ -88,3 +89,4 @@ public class InventoryService {
         inventoryRepository.delete(inventory.get());
     }
 }
+
