@@ -18,12 +18,12 @@ public class Inventory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(nullable = false)
+    @Column(name = "user_id")
     private int userId;
 
     @ManyToOne
-    @JoinColumn(name = "stock_id", nullable = false)
-    private Stock stock;
+    @JoinColumn(name = "stock_price_id", nullable = false)
+    private StockPrice stockPrice;
 
     @Column(nullable = false)
     private Integer quantity;
@@ -37,19 +37,20 @@ public class Inventory {
     public Inventory() {
     }
 
-    public Inventory(int userId, Stock stock, Integer quantity, BigDecimal purchasePrice, LocalDateTime purchaseDate) {
+    public Inventory(int userId, StockPrice stockPrice, Integer quantity, BigDecimal purchasePrice,
+            LocalDateTime purchaseDate) {
         this.userId = userId;
-        this.stock = stock;
+        this.stockPrice = stockPrice;
         this.quantity = quantity;
         this.purchasePrice = purchasePrice;
         this.purchaseDate = purchaseDate;
     }
 
-    public Inventory(int id, int userId, Stock stock, Integer quantity, BigDecimal purchasePrice,
+    public Inventory(int id, int userId, StockPrice stockPrice, Integer quantity, BigDecimal purchasePrice,
             LocalDateTime purchaseDate) {
         this.id = id;
         this.userId = userId;
-        this.stock = stock;
+        this.stockPrice = stockPrice;
         this.quantity = quantity;
         this.purchasePrice = purchasePrice;
         this.purchaseDate = purchaseDate;
@@ -67,16 +68,16 @@ public class Inventory {
         return userId;
     }
 
-    public void setUserId(int userId2) {
-        this.userId = userId2;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
-    public Stock getStock() {
-        return stock;
+    public StockPrice getStockPrice() {
+        return stockPrice;
     }
 
-    public void setStock(Stock stock) {
-        this.stock = stock;
+    public void setStockPrice(StockPrice stockPrice) {
+        this.stockPrice = stockPrice;
     }
 
     public Integer getQuantity() {
@@ -109,7 +110,7 @@ public class Inventory {
         int result = 1;
         result = prime * result + id;
         result = prime * result + userId;
-        result = prime * result + ((stock == null) ? 0 : stock.hashCode());
+        result = prime * result + ((stockPrice == null) ? 0 : stockPrice.hashCode());
         result = prime * result + ((quantity == null) ? 0 : quantity.hashCode());
         result = prime * result + ((purchasePrice == null) ? 0 : purchasePrice.hashCode());
         result = prime * result + ((purchaseDate == null) ? 0 : purchaseDate.hashCode());
@@ -129,10 +130,10 @@ public class Inventory {
             return false;
         if (userId != other.userId)
             return false;
-        if (stock == null) {
-            if (other.stock != null)
+        if (stockPrice == null) {
+            if (other.stockPrice != null)
                 return false;
-        } else if (!stock.equals(other.stock))
+        } else if (!stockPrice.equals(other.stockPrice))
             return false;
         if (quantity == null) {
             if (other.quantity != null)
@@ -154,13 +155,15 @@ public class Inventory {
 
     @Override
     public String toString() {
-        return "Inventory [id=" + id + ", userId=" + userId + ", stock=" + stock + ", quantity=" + quantity
+        return "Inventory [id=" + id + ", userId=" + userId + ", stockPrice=" + stockPrice + ", quantity=" + quantity
                 + ", purchasePrice=" + purchasePrice + ", purchaseDate=" + purchaseDate + ", getClass()=" + getClass()
-                + ", getId()=" + getId() + ", getUserId()=" + getUserId() + ", getStock()=" + getStock()
+                + ", getId()=" + getId() + ", getUserId()=" + getUserId() + ", getStockPrice()=" + getStockPrice()
                 + ", getQuantity()=" + getQuantity() + ", getPurchasePrice()=" + getPurchasePrice()
                 + ", getPurchaseDate()=" + getPurchaseDate() + ", hashCode()=" + hashCode() + ", toString()="
                 + super.toString() + "]";
     }
+
+   
 
     
 }

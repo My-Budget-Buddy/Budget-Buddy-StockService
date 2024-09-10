@@ -42,6 +42,19 @@ public class StockController {
         }
     }
 
+    @GetMapping("/symbol/{symbol}")
+    public ResponseEntity<Stock> getStockBySymbol(@PathVariable String symbol){
+        Stock stock = stockService.getStockBySymbol(symbol);
+        if(stock != null){
+            return new ResponseEntity<>(stock, HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+
+    }
+
     // Update stock
     @PutMapping("/{id}")
     public ResponseEntity<Stock> updateStock(@PathVariable int id, @RequestBody Stock updatedStock) {

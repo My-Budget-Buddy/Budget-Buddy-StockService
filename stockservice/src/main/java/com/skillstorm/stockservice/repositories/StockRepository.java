@@ -10,5 +10,5 @@ import com.skillstorm.stockservice.models.Stock;
 @Repository
 public interface StockRepository extends JpaRepository<Stock, Integer>{
     
-    Stock findBySymbol(String symbol);
+   Stock findBySymbol(String symbol);
 }

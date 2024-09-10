@@ -18,7 +18,7 @@ public class Stock {
     @Column(unique = true, nullable = false)
     private String symbol;
 
-    @Column()
+    @Column(nullable = true)
     private String companyName;
 
     @Column()
