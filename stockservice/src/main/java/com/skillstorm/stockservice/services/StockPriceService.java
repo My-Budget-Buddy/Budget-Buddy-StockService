@@ -33,7 +33,7 @@ public class StockPriceService {
             return null;
         }
     }
-    
+
     @Transactional
     public StockPrice save(StockPrice stockPrice) {
         return stockPriceRespository.save(stockPrice);

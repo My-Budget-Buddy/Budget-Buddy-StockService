@@ -31,12 +31,12 @@ public class InventoryController {
         @RequestParam("stockSymbol") String stockSymbol,
         @RequestParam("quantity") Integer quantity
     ) {
-        try {
+//        try {
             Inventory inventory = inventoryService.addStockToInventory(userId, stockSymbol, quantity);
             return new ResponseEntity<>(inventory, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+//        }
     }
 
     // get all stocks in the user's inventory
@@ -76,15 +76,15 @@ public class InventoryController {
     }
 
     // delete a stock from the inventory
-    @DeleteMapping("/delete")
-    public ResponseEntity<Void> deleteStockFromInventory(
-            @RequestParam int userId,
-            @RequestParam String stockSymbol) {
-        try {
-            inventoryService.deleteStockFromInventory(userId, stockSymbol);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
+//    @DeleteMapping("/delete")
+//    public ResponseEntity<Void> deleteStockFromInventory(
+//            @RequestParam int userId,
+//            @RequestParam String stockSymbol) {
+//        try {
+//            inventoryService.deleteStockFromInventory(userId, stockSymbol);
+//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
 }

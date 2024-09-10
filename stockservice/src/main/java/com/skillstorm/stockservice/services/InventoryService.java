@@ -30,25 +30,27 @@ public class InventoryService {
     private StockPriceRespository stockPriceRepository;
 
      // Adds Stock and StockPrice to Inventory using stock symbol
-     public Inventory addStockToInventory(int userId, String stockSymbol, Integer quantity) throws Exception {
-        // Find the stockPrice by symbol
-        StockPrice stockPrice = stockPriceRepository.findLatestByStockSymbol(stockSymbol);
+     public Inventory addStockToInventory(int userId, String stockSymbol, Integer quantity) {
+         // Find the stockPrice by symbol
+         List<StockPrice> stockPriceList = stockPriceRepository.findLatestByStockSymbol(stockSymbol);
 
-        if (stockPrice != null) {
-            // Create a new inventory item
-            Inventory inventory = new Inventory();
-            inventory.setUserId(userId);
-            inventory.setStockPrice(stockPrice); 
-            inventory.setQuantity(quantity);
-            inventory.setPurchasePrice(stockPrice.getCurrentPrice());  
-            inventory.setPurchaseDate(LocalDateTime.now());
-            
-            // Save the inventory item
-            return inventoryRepository.save(inventory);
-        } else {
-            throw new Exception("Stock with symbol: " + stockSymbol + " not found.");
-        }
-    }
+
+//         if (stockPrice != null) {
+             // Create a new inventory item
+             Inventory inventory = new Inventory();
+             inventory.setUserId(userId);
+             inventory.setStockPrice(stockPriceList.get(0));
+             inventory.setQuantity(quantity);
+             inventory.setPurchasePrice(stockPriceList.get(0).getCurrentPrice());
+             inventory.setPurchaseDate(LocalDateTime.now());
+
+             // Save the inventory item
+             return inventoryRepository.save(inventory);
+//        } else {
+//            throw new Exception("Stock with symbol: " + stockSymbol + " not found.");
+//        }
+         }
+
 
     // Get all stocks in user's inventory
     public List<Inventory> getUserInventory(int userId) {
@@ -74,19 +76,19 @@ public class InventoryService {
     }
 
     // Deletes a stock from the inventory
-    public void deleteStockFromInventory(int userId, String stockSymbol) throws Exception {
-        // Find stockPrice by symbol
-        StockPrice stockPrice = stockPriceRepository.findLatestByStockSymbol(stockSymbol);
-        if (stockPrice == null) {
-            throw new Exception("Stock with symbol: " + stockSymbol + " not found.");
-        }
-
-        Optional<Inventory> inventory = inventoryRepository.findByUserIdAndStockPrice(userId, stockPrice);
-        if (inventory.isEmpty()) {
-            throw new Exception("Inventory item not found for user ID: " + userId + " and stock symbol: " + stockSymbol);
-        }
-
-        inventoryRepository.delete(inventory.get());
-    }
+//    public void deleteStockFromInventory(int userId, String stockSymbol) throws Exception {
+//        // Find stockPrice by symbol
+//        StockPrice stockPrice = stockPriceRepository.findLatestByStockSymbol(stockSymbol);
+//        if (stockPrice == null) {
+//            throw new Exception("Stock with symbol: " + stockSymbol + " not found.");
+//        }
+//
+//        Optional<Inventory> inventory = inventoryRepository.findByUserIdAndStockPrice(userId, stockPrice);
+//        if (inventory.isEmpty()) {
+//            throw new Exception("Inventory item not found for user ID: " + userId + " and stock symbol: " + stockSymbol);
+//        }
+//
+//        inventoryRepository.delete(inventory.get());
+//    }
 }
 

@@ -15,5 +15,5 @@ public interface StockPriceRespository extends JpaRepository<StockPrice, Integer
     List<StockPrice> findByStock_Symbol(String stockSymbol);
 
     @Query("SELECT sp FROM StockPrice sp WHERE sp.stock.symbol = :stockSymbol ORDER BY sp.tradingDay DESC")
-    StockPrice findLatestByStockSymbol(@Param("stockSymbol") String stockSymbol);
+    List<StockPrice> findLatestByStockSymbol(@Param("stockSymbol") String stockSymbol);
 }
