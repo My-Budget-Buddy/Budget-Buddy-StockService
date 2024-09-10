@@ -24,7 +24,16 @@ public class StockPriceService {
         return stockPrice.get();
     }
 
-
+    public List<StockPrice> getStockPriceBySymbol(String symbol){
+        List<StockPrice> stockPriceList = stockPriceRespository.findByStock_Symbol(symbol);
+        if(!stockPriceList.isEmpty()){
+            return stockPriceList;
+        }
+        else{
+            return null;
+        }
+    }
+    
     @Transactional
     public StockPrice save(StockPrice stockPrice) {
         return stockPriceRespository.save(stockPrice);

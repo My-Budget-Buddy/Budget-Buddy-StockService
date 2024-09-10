@@ -1,5 +1,6 @@
 package com.skillstorm.stockservice.controllers;
 
+import com.skillstorm.stockservice.models.Stock;
 import com.skillstorm.stockservice.models.StockPrice;
 import com.skillstorm.stockservice.services.StockPriceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,16 @@ public class StockPriceController {
         StockPrice stockPrice = stockPriceService.getStockPriceById(id);
         if(stockPrice != null){
             return new ResponseEntity<>(stockPrice, HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    @GetMapping("/symbol/{symbol}")
+    public ResponseEntity<List<StockPrice>> getStockPricesBySymbol(@PathVariable String symbol){
+        List<StockPrice> stockPriceList = stockPriceService.getStockPriceBySymbol(symbol);
+        if(!stockPriceList.isEmpty()){
+            return new ResponseEntity<>(stockPriceList, HttpStatus.OK);
         }
         else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
