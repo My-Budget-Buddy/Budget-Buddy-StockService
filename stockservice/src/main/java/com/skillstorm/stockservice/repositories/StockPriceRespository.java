@@ -11,4 +11,6 @@ import java.util.List;
 public interface StockPriceRespository extends JpaRepository<StockPrice, Integer> {
 
     List<StockPrice> findByStock_Symbol(String stockSymbol);
+
+    StockPrice findByStockOnly_Symbol(String stockSymbol);
 }

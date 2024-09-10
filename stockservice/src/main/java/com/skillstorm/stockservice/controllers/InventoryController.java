@@ -25,22 +25,21 @@ public class InventoryController {
      @Autowired
     private InventoryService inventoryService;
 
-    // Endpoint to add a stock to the inventory
     @PostMapping("/add")
     public ResponseEntity<Inventory> addStockToInventory(
-            @RequestParam int userId,
-            @RequestParam String stockSymbol,
-            @RequestParam Integer quantity,
-            @RequestParam BigDecimal purchasePrice) {
-        Inventory inventory = inventoryService.addStockToInventory(userId, stockSymbol, quantity, purchasePrice);
-        if (inventory != null) {
+        @RequestParam("userId") int userId,
+        @RequestParam("stockSymbol") String stockSymbol,
+        @RequestParam("quantity") Integer quantity
+    ) {
+        try {
+            Inventory inventory = inventoryService.addStockToInventory(userId, stockSymbol, quantity);
             return new ResponseEntity<>(inventory, HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
 
-    // Endpoint to get all stocks in the user's inventory
+    // get all stocks in the user's inventory
     @GetMapping("/{userId}")
     public ResponseEntity<List<Inventory>> getUserInventory(@PathVariable int userId) {
         List<Inventory> inventoryList = inventoryService.getUserInventory(userId);
@@ -51,7 +50,7 @@ public class InventoryController {
         }
     }
 
-    // Endpoint to get a specific inventory item by its ID
+    // get a specific inventory item by its ID
     @GetMapping("/item/{inventoryId}")
     public ResponseEntity<Inventory> getInventoryItemById(@PathVariable int inventoryId) {
         Inventory inventory = inventoryService.getInventoryItemById(inventoryId);
@@ -62,7 +61,7 @@ public class InventoryController {
         }
     }
 
-    // Endpoint to update an inventory item
+    // update an inventory item
     @PutMapping("/update/{inventoryId}")
     public ResponseEntity<Inventory> updateInventoryItem(
             @PathVariable int inventoryId,
@@ -76,7 +75,7 @@ public class InventoryController {
         }
     }
 
-    // Endpoint to delete a stock from the inventory
+    // delete a stock from the inventory
     @DeleteMapping("/delete")
     public ResponseEntity<Void> deleteStockFromInventory(
             @RequestParam int userId,

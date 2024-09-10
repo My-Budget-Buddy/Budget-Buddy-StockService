@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 
 import com.skillstorm.stockservice.models.Inventory;
 import com.skillstorm.stockservice.models.Stock;
+import com.skillstorm.stockservice.models.StockPrice;
 import com.skillstorm.stockservice.repositories.InventoryRepository;
+import com.skillstorm.stockservice.repositories.StockPriceRespository;
 import com.skillstorm.stockservice.repositories.StockRepository;
 
 import jakarta.transaction.Transactional;
@@ -24,23 +26,31 @@ public class InventoryService {
     @Autowired
     private StockRepository stockRepository;
 
-    // Creates Stock
-    @Transactional
-    public Inventory addStockToInventory(int userId, String stockSymbol, Integer quantity, BigDecimal purchasePrice) {
-        Stock stock = stockRepository.findBySymbol(stockSymbol);
-        if (stock != null) {
+    @Autowired
+    private StockPriceRespository stockPriceRepository;
+
+    // Adds Stock and StockPrice to Inventory using stock symbol
+    public Inventory addStockToInventory(int userId, String stockSymbol, Integer quantity) throws Exception {
+        // Find the stock by symbol
+        StockPrice stockPrice = stockPriceRepository.findByStockOnly_Symbol(stockSymbol);
+
+        if (stockPrice != null) {
+            // Create a new inventory item
             Inventory inventory = new Inventory();
             inventory.setUserId(userId);
-            inventory.setStock(stock);
+            inventory.setStockPrice(stockPrice); 
             inventory.setQuantity(quantity);
-            inventory.setPurchasePrice(purchasePrice);
+            inventory.setPurchasePrice(stockPrice.getCurrentPrice());  
             inventory.setPurchaseDate(LocalDateTime.now());
+            
+            // Save the inventory item
             return inventoryRepository.save(inventory);
+        } else {
+            throw new Exception("Stock with symbol: " + stockSymbol + " not found.");
         }
-        return null; // Stock not found
     }
 
-    // Get all stocks for user
+    // Get all stocks in user's inventory
     public List<Inventory> getUserInventory(int userId) {
         return inventoryRepository.findByUserId(userId);
     }
@@ -52,7 +62,6 @@ public class InventoryService {
     }
 
     // Update an existing inventory item (Update)
-    @Transactional
     public Inventory updateInventoryItem(int inventoryId, Integer quantity, BigDecimal purchasePrice) {
         Optional<Inventory> existingInventory = inventoryRepository.findById(inventoryId);
         if (existingInventory.isPresent()) {
@@ -65,7 +74,6 @@ public class InventoryService {
     }
 
     // Deletes a stock from the inventory
-    @Transactional
     public void deleteStockFromInventory(int userId, String stockSymbol) throws Exception {
         Stock stock = stockRepository.findBySymbol(stockSymbol);
         if (stock == null) {
@@ -74,8 +82,7 @@ public class InventoryService {
 
         Optional<Inventory> inventory = inventoryRepository.findByUserIdAndStock(userId, stock);
         if (inventory.isEmpty()) {
-            throw new Exception(
-                    "Inventory item not found for user ID: " + userId + " and stock symbol: " + stockSymbol);
+            throw new Exception("Inventory item not found for user ID: " + userId + " and stock symbol: " + stockSymbol);
         }
 
         inventoryRepository.delete(inventory.get());
