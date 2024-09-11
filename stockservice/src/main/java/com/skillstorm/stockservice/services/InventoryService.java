@@ -30,12 +30,12 @@ public class InventoryService {
     private StockPriceRespository stockPriceRepository;
 
      // Adds Stock and StockPrice to Inventory using stock symbol
-     public Inventory addStockToInventory(int userId, String stockSymbol, Integer quantity) {
+     public Inventory addStockToInventory(int userId, String stockSymbol, Integer quantity) throws Exception{
          // Find the stockPrice by symbol
          List<StockPrice> stockPriceList = stockPriceRepository.findLatestByStockSymbol(stockSymbol);
 
 
-//         if (stockPrice != null) {
+         if (!stockPriceList.isEmpty()) {
              // Create a new inventory item
              Inventory inventory = new Inventory();
              inventory.setUserId(userId);
@@ -46,9 +46,9 @@ public class InventoryService {
 
              // Save the inventory item
              return inventoryRepository.save(inventory);
-//        } else {
-//            throw new Exception("Stock with symbol: " + stockSymbol + " not found.");
-//        }
+        } else {
+            throw new Exception("Stock with symbol: " + stockSymbol + " not found.");
+        }
          }
 
 

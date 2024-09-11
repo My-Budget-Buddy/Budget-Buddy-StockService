@@ -31,12 +31,12 @@ public class InventoryController {
         @RequestParam("stockSymbol") String stockSymbol,
         @RequestParam("quantity") Integer quantity
     ) {
-//        try {
+        try {
             Inventory inventory = inventoryService.addStockToInventory(userId, stockSymbol, quantity);
             return new ResponseEntity<>(inventory, HttpStatus.CREATED);
-//        } catch (Exception e) {
-//            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-//        }
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
     }
 
     // get all stocks in the user's inventory
