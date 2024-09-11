@@ -42,6 +42,7 @@ public class StockController {
         }
     }
 
+    // Get stock by symbol
     @GetMapping("/symbol/{symbol}")
     public ResponseEntity<Stock> getStockBySymbol(@PathVariable String symbol){
         Stock stock = stockService.getStockBySymbol(symbol);
@@ -88,6 +89,7 @@ public class StockController {
         }
     }
 
+    // used for searching a stock and updating the information in the database for that stock by symbol
     @PostMapping("/update/{symbol}")
     public ResponseEntity<String> updateStockData(@PathVariable String symbol){
         try{

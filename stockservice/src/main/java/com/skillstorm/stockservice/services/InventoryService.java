@@ -75,20 +75,14 @@ public class InventoryService {
         return null;
     }
 
-    // Deletes a stock from the inventory
-//    public void deleteStockFromInventory(int userId, String stockSymbol) throws Exception {
-//        // Find stockPrice by symbol
-//        StockPrice stockPrice = stockPriceRepository.findLatestByStockSymbol(stockSymbol);
-//        if (stockPrice == null) {
-//            throw new Exception("Stock with symbol: " + stockSymbol + " not found.");
-//        }
-//
-//        Optional<Inventory> inventory = inventoryRepository.findByUserIdAndStockPrice(userId, stockPrice);
-//        if (inventory.isEmpty()) {
-//            throw new Exception("Inventory item not found for user ID: " + userId + " and stock symbol: " + stockSymbol);
-//        }
-//
-//        inventoryRepository.delete(inventory.get());
-//    }
+    // Deletes inventory by ID
+    public void deleteInventoryById(int inventoryId) throws Exception {
+        if (!inventoryRepository.existsById(inventoryId)) {
+            throw new Exception("Inventory item with ID: " + inventoryId + " not found.");
+        }
+
+        inventoryRepository.deleteById(inventoryId);
+    }
+
 }
 

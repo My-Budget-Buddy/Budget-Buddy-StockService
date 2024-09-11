@@ -16,14 +16,18 @@ public class StockPriceService {
     @Autowired
     private StockPriceRespository stockPriceRespository;
 
+    // get all stock information
     public List<StockPrice> getAllStockPrices(){
         return stockPriceRespository.findAll();
     }
+
+    // get stock information by id
     public StockPrice getStockPriceById(int id){
         Optional<StockPrice> stockPrice = stockPriceRespository.findById(id);
         return stockPrice.get();
     }
 
+    // get all stock information by symbol
     public List<StockPrice> getStockPriceBySymbol(String symbol){
         List<StockPrice> stockPriceList = stockPriceRespository.findByStock_Symbol(symbol);
         if(!stockPriceList.isEmpty()){
@@ -34,12 +38,14 @@ public class StockPriceService {
         }
     }
 
+    // create stock information
     @Transactional
     public StockPrice save(StockPrice stockPrice) {
         return stockPriceRespository.save(stockPrice);
     }
 
 
+    // delete stock information by id
     @Transactional
     public void deleteById(int id) {
         stockPriceRespository.deleteById(id);
