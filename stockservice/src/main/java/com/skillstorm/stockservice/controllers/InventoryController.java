@@ -21,8 +21,8 @@ import com.skillstorm.stockservice.services.InventoryService;
 @RestController
 @RequestMapping("/inventory")
 public class InventoryController {
-    
-     @Autowired
+
+    @Autowired
     private InventoryService inventoryService;
 
     @PostMapping("/add")
@@ -75,16 +75,14 @@ public class InventoryController {
         }
     }
 
-    // delete a stock from the inventory
-//    @DeleteMapping("/delete")
-//    public ResponseEntity<Void> deleteStockFromInventory(
-//            @RequestParam int userId,
-//            @RequestParam String stockSymbol) {
-//        try {
-//            inventoryService.deleteStockFromInventory(userId, stockSymbol);
-//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//        } catch (Exception e) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
+    // delete inventory item
+    @DeleteMapping("/delete/{inventoryId}")
+    public ResponseEntity<Void> deleteInventoryById(@PathVariable int inventoryId) {
+        try {
+            inventoryService.deleteInventoryById(inventoryId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }

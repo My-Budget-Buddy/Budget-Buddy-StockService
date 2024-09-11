@@ -13,8 +13,10 @@ import java.util.List;
 @Repository
 public interface StockPriceRespository extends JpaRepository<StockPrice, Integer> {
 
+    // find stock information by symbol
     List<StockPrice> findByStock_Symbol(String stockSymbol);
 
+    // find newest stock by symbol
     @Query("SELECT sp FROM StockPrice sp WHERE sp.stock.symbol = :stockSymbol ORDER BY sp.tradingDay DESC")
     List<StockPrice> findLatestByStockSymbol(@Param("stockSymbol") String stockSymbol) ;
 }
