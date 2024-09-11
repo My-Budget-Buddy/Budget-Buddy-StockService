@@ -31,15 +31,18 @@ public class StockService {
     @Autowired
     private StockRepository stockRepository;
 
+    // get a list of all stocks
     public List<Stock> getAllStocks() {
         return stockRepository.findAll();
     }
 
+    // get stock by id
     public Stock getStockById(int id) {
         Optional<Stock> stock = stockRepository.findById(id);
         return stock.orElse(null);
     }
 
+    // get stock by its symbol
     public Stock getStockBySymbol(String symbol){
         Stock stock = stockRepository.findBySymbol(symbol);
         if(stock != null){
@@ -50,6 +53,7 @@ public class StockService {
         }
     }
 
+    // update stock 
     public Stock updateStock(int id, Stock updatedStock) {
         Optional<Stock> existingStock = stockRepository.findById(id);
         if (existingStock.isPresent()) {
@@ -62,10 +66,12 @@ public class StockService {
         }
     }
 
+    // create stock
     public Stock createStock(Stock stock) {
         return stockRepository.save(stock);
     }
 
+    // delete stock by id
     public void deleteStock(int id) throws Exception {
         if (!stockRepository.existsById(id)) {
             throw new Exception("Stock with id: " + id + " not found");
@@ -73,22 +79,32 @@ public class StockService {
         stockRepository.deleteById(id);
     }
 
+    // third party API call to update stocks when searched for on frontend
     public void updateStockData(String symbol) throws Exception{
         RestTemplate restTemplate = new RestTemplate();
+        // setup the url with symbol to call third party API
         String url = String.format(API_URL, symbol);
 
+        // call the third-party API and map the response to StockDataResponse class
         StockDataResponse response = restTemplate.getForObject(url, StockDataResponse.class);
+
+        // check if the response is valid and contains the "Global Quote" data
         if (response != null && response.getGlobalQuote() != null) {
+
+            // extract the data
             Map<String, String> quoteData = response.getGlobalQuote();
 
+            // fetch the Stock entity from the database using the symbol
             Stock stock = stockRepository.findBySymbol(symbol);
 
+            // if the stock doesn't exist in the database, create a new Stock entity
             if (stock == null) {
                 stock = new Stock();
                 stock.setSymbol(symbol);
                 stockRepository.save(stock);
             }
 
+            // create a new StockPrice entity and populate it with the data from the API response
             StockPrice stockPrice = new StockPrice();
             stockPrice.setStock(stock);
             stockPrice.setOpenPrice(new BigDecimal(quoteData.get("02. open")));
@@ -101,6 +117,7 @@ public class StockService {
             stockPrice.setChangePercent(new BigDecimal(quoteData.get("10. change percent").replace("%", "")));
             stockPrice.setTradingDay(LocalDate.parse(quoteData.get("07. latest trading day")));
 
+            // save the StockPrice entity in the repository
             stockPriceRespository.save(stockPrice);
         } else {
             throw new Exception("Error fetching stock data from API for symbol: " + symbol);

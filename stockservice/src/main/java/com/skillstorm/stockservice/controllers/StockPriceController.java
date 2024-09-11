@@ -23,6 +23,7 @@ public class StockPriceController {
         return new ResponseEntity<>(stockPrices, HttpStatus.OK);
     }
 
+    // get stock information by id
     @GetMapping("/{id}")
     public ResponseEntity<StockPrice> getStockPriceById(@PathVariable int id){
         StockPrice stockPrice = stockPriceService.getStockPriceById(id);
@@ -33,6 +34,8 @@ public class StockPriceController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    // get all stock information by symbol
     @GetMapping("/symbol/{symbol}")
     public ResponseEntity<List<StockPrice>> getStockPricesBySymbol(@PathVariable String symbol){
         List<StockPrice> stockPriceList = stockPriceService.getStockPriceBySymbol(symbol);
@@ -44,12 +47,14 @@ public class StockPriceController {
         }
     }
 
+    // create stock information
     @PostMapping
     public ResponseEntity<StockPrice> createStockPrice(@RequestBody StockPrice stockPrice){
         StockPrice createdStockPrice = stockPriceService.save(stockPrice);
         return new ResponseEntity<>(createdStockPrice, HttpStatus.CREATED);
     }
 
+    // Delete stock information by id
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteStockPrice(@PathVariable int id){
         if (stockPriceService.getStockPriceById(id) != null){
